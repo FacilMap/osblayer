@@ -409,6 +409,8 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 */
 
 OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
+	title : "Create OpenStreetBug",
+
 	/**
 	 * The icon to be used for the temporary markers that the “create bug” popup belongs to.
 	 * @var OpenLayers.Icon
@@ -428,6 +430,16 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		this.osbLayer = osbLayer;
 
 		OpenLayers.Control.prototype.initialize.apply(this, [ options ]);
+
+		this.events.register("activate", this, function() {
+			if(!this.osbLayer.getVisibility())
+				this.osbLayer.setVisibility(true);
+		});
+
+		this.osbLayer.events.register("visibilitychanged", this, function() {
+			if(this.active && !this.osbLayer.getVisibility())
+				this.osbLayer.setVisibility(true);
+		});
 	},
 
 	destroy: function() {
@@ -498,7 +510,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		popup.updateSize();
 	},
 
-	CLASS_NAME: "OpenLayers.Control.Click"
+	CLASS_NAME: "OpenLayers.Control.OpenStreetBugs"
 });
 
 
