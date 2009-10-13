@@ -408,7 +408,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
  * the OpenLayers.Map.addControl() method and activate() it.
 */
 
-OpenLayers.Control.OpenStreetBugs = OpenLayers.Class(OpenLayers.Control, {
+OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 	/**
 	 * The icon to be used for the temporary markers that the “create bug” popup belongs to.
 	 * @var OpenLayers.Icon
