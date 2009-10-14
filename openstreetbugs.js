@@ -5,10 +5,10 @@
 
 OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers, {
 	/**
-	 * The URL of the getBugs script to be used, with a ? already appended. The getBugs script creates a JavaScript file that calls the global function putAJAXMarker() (see below) for each requested bug.
+	 * The URL of the OpenStreetBugs API.
 	 * @var String
 	*/
-	serverURL : "http://openstreetbugs.schokokeks.org/api/0.1/getBugs?",
+	serverURL : "http://openstreetbugs.schokokeks.org/api/0.1/",
 
 	/**
 	 * Associative array (index: bug ID) that is filled with the bugs loaded in this layer
@@ -52,6 +52,24 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	reopenPopups : [ ],
 
 	/**
+	 * The user name will be saved in a cookie if this isn’t set to false.
+	 * @var Boolean
+	*/
+	setCookie : true,
+
+	/**
+	 * The lifetime of the user name cookie in days.
+	 * @var Number
+	*/
+	cookieLifetime : 1000,
+
+	/**
+	 * The path where the cookie will be available on this server.
+	 * @var String
+	*/
+	cookiePath : null,
+
+	/**
 	 * @param String name
 	 * @param Boolean readonly If this is set to true, there will be no buttons to add comments or to close a bug.
 	*/
@@ -64,6 +82,17 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 		this.events.register("visibilitychanged", this, this.updatePopupVisibility);
 		this.events.register("visibilitychanged", this, this.loadBugs);
+
+		var cookies = document.cookie.split(/;\s*/);
+		for(var i=0; i<cookies.length; i++)
+		{
+			var cookie = cookies[i].split("=");
+			if(cookie[0] == "osbUsername")
+			{
+				this.username = decodeURIComponent(cookie[1]);
+				break;
+			}
+		}
 	},
 
 	/**
@@ -77,6 +106,18 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		this.loadBugs();
 
 		return ret;
+	},
+
+	/**
+	 * At the moment the OSB API responses to requests using JavaScript code. This way the Same Origin Policy can be worked around. Unfortunately, this makes communicating with the API a bit too asynchronous, at the moment there is no way to tell to which request the API actually responses.
+	 * This method creates a new script HTML element that imports the API request URL. The API JavaScript response then executes the global functions provided below.
+	 * @param String url The URL this.serverURL + url is requested.
+	*/
+	apiRequest : function(url) {
+		var script = document.createElement("script");
+		script.type = "text/javascript";
+		script.src = this.serverURL + url;
+		document.body.appendChild(script);
 	},
 
 	/**
@@ -114,6 +155,16 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 		this.username = username;
 
+		if(this.setCookie)
+		{
+			var cookie = "osbUsername="+encodeURIComponent(username);
+			if(this.cookieLifetime)
+				cookie += ";expires="+(new Date((new Date()).getTime() + this.cookieLifetime*86400000)).toGMTString();
+			if(this.cookiePath)
+				cookie += ";path="+this.cookiePath;
+			document.cookie = cookie;
+		}
+
 		for(var i=0; i<this.markers.length; i++)
 		{
 			if(!this.markers[i].feature.popup) continue;
@@ -124,6 +175,18 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	},
 
 	/**
+	 * Returns the currently set username or “NoName” if none is set.
+	*/
+
+	getUserName : function()
+	{
+		if(this.username)
+			return this.username;
+		else
+			return "NoName";
+	},
+
+	/**
 	 * Loads the bugs in the current bounding box. Is automatically called by an event handler ("moveend" event) that is created in the afterAdd() method.
 	*/
 	loadBugs : function()
@@ -131,16 +194,15 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		if(!this.getVisibility())
 			return true;
 
-		var bounds = this.map.getExtent().transform(this.map.getProjectionObject(), this.apiProjection);
+		var bounds = this.map.getExtent();
+		if(!bounds) return false;
+		bounds.transform(this.map.getProjectionObject(), this.apiProjection);
 
-		var script = document.createElement("script");
-		script.type = "text/javascript";
-		script.src = this.serverURL
-			+ "t="+this.round(bounds.top, 5)
+		this.apiRequest("getBugs"
+			+ "?t="+this.round(bounds.top, 5)
 			+ "&r="+this.round(bounds.right, 5)
 			+ "&b="+this.round(bounds.bottom, 5)
-			+ "&l="+this.round(bounds.left, 5);
-		document.body.appendChild(script);
+			+ "&l="+this.round(bounds.left, 5));
 	},
 
 	/**
@@ -163,9 +225,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	{
 		if(this.bugs[id])
 		{
-			if(this.bugs[id].popup)
+			if(this.bugs[id].popup && !this.bugs[id].popup.visible())
 				this.setPopupContent(id);
-			return;
+			if(this.bugs[id].closed != putAJAXMarker.bugs[id][2])
+				this.bugs[id].destroy();
+			else
+				return;
 		}
 
 		var lonlat = putAJAXMarker.bugs[id][0].transform(this.apiProjection, this.map.getProjectionObject());
@@ -174,6 +239,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		var feature = new OpenLayers.Feature(this, lonlat, { icon: (closed ? this.iconClosed : this.iconOpen).clone(), autoSize: true });
 		feature.popupClass = OpenLayers.Popup.FramedCloud.OpenStreetBugs;
 		feature.osbId = id;
+		feature.closed = closed;
 
 		var marker = feature.createMarker();
 		marker.feature = feature;
@@ -236,11 +302,13 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		}
 		containerDescription.appendChild(el1);
 
-		if(closed)
+		if(putAJAXMarker.bugs[id][2])
 		{
 			el1 = document.createElement("p");
-			el1.className = "osb-note";
-			el1.appendChild(document.createTextNode("This error has been fixed already. However, it might take a couple of days before the map image is updated."));
+			el1.className = "osb-fixed";
+			el2 = document.createElement("em");
+			el2.appendChild(document.createTextNode("This error has been fixed already. However, it might take a couple of days before the map image is updated."));
+			el1.appendChild(el2);
 			containerDescription.appendChild(el1);
 		}
 		else if(!this.readonly)
@@ -251,6 +319,9 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el2.appendChild(document.createTextNode("Comment/Close"));
 			el1.appendChild(el2);
 			containerDescription.appendChild(el1);
+
+			var el_form = document.createElement("form");
+			el_form.onsubmit = function(){ if(inputComment.value.match(/^\s*$/)) return false; layer.submitComment(id, inputComment.value); layer.hidePopup(id); return false; };
 
 			el1 = document.createElement("dl");
 			el2 = document.createElement("dt");
@@ -271,24 +342,25 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			var inputComment = document.createElement("input");
 			el2.appendChild(inputComment);
 			el1.appendChild(el2);
-			containerChange.appendChild(el1);
+			el_form.appendChild(el1);
 
 			el1 = document.createElement("ul");
 			el1.className = "buttons";
 			el2 = document.createElement("li");
 			el3 = document.createElement("button");
-			el3.onclick = function(){ submitComment(id, inputComment.value); };
+			el3.type = "submit";
 			el3.appendChild(document.createTextNode("Add comment"));
 			el2.appendChild(el3);
 			el1.appendChild(el2);
 
 			el2 = document.createElement("li");
 			el3 = document.createElement("button");
-			el3.onclick = function(){ closeBug(id); };
+			el3.onclick = function(){ layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
 			el3.appendChild(document.createTextNode("Mark as fixed"));
 			el2.appendChild(el3);
 			el1.appendChild(el2);
-			containerChange.appendChild(el1);
+			el_form.appendChild(el1);
+			containerChange.appendChild(el_form);
 
 			el1 = document.createElement("div");
 			el2 = document.createElement("button");
@@ -307,6 +379,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * @param String description
 	*/
 	createBug: function(lonlat, description) {
+		this.apiRequest("addPOIexec"
+			+ "?lat="+encodeURIComponent(lonlat.lat)
+			+ "&lon="+encodeURIComponent(lonlat.lon)
+			+ "&text="+encodeURIComponent(description + " [" + this.getUserName() + "]")
+			+ "&format=js"
+		);
 	},
 
 	/**
@@ -315,7 +393,11 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * @param String comment
 	*/
 	submitComment: function(id, comment) {
-
+		this.apiRequest("editPOIexec"
+			+ "?id="+encodeURIComponent(id)
+			+ "&text="+encodeURIComponent(comment + " [" + this.getUserName() + "]")
+			+ "&format=js"
+		);
 	},
 
 	/**
@@ -323,6 +405,10 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * @param Number id
 	*/
 	closeBug: function(id) {
+		this.apiRequest("closePOIexec"
+			+ "?id="+encodeURIComponent(id)
+			+ "&format=js"
+		);
 	},
 
 	/**
@@ -344,6 +430,8 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		var add = null;
 		if(!this.bugs[id].popup)
 			add = this.bugs[id].createPopup(false);
+		else if(this.bugs[id].popup.visible())
+			return;
 
 		this.setPopupContent(id);
 		if(add)
@@ -357,11 +445,13 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * @param Number id
 	*/
 	hidePopup: function(id) {
-		if(!this.bugs[id].popup)
+		if(!this.bugs[id].popup || !this.bugs[id].popup.visible())
 			return;
 
 		this.resetPopupContent(id);
 		this.bugs[id].popup.hide();
+		if(this.bugs[id].osbClicked)
+			this.bugs[id].osbClicked = false;
 	},
 
 	/**
@@ -384,8 +474,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	markerMouseOver: function(e) {
 		var feature = this; // Context is the feature
 
-		if(!feature.osbClicked)
-			feature.layer.showPopup(feature.osbId);
+		feature.layer.showPopup(feature.osbId);
 		OpenLayers.Event.stop(e);
 	},
 
@@ -475,6 +564,9 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		el1.appendChild(document.createTextNode("Create bug"));
 		newContent.appendChild(el1);
 
+		var el_form = document.createElement("form");
+		el_form.onsubmit = function() { control.osbLayer.createBug(lonlatApi, inputDescription.value); marker.feature = null; feature.destroy(); return false; };
+
 		el1 = document.createElement("dl");
 		el2 = document.createElement("dt");
 		el2.appendChild(document.createTextNode("Nickname"));
@@ -494,14 +586,15 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		var inputDescription = document.createElement("input");
 		el2.appendChild(inputDescription);
 		el1.appendChild(el2);
-		newContent.appendChild(el1);
+		el_form.appendChild(el1);
 
 		el1 = document.createElement("div");
 		el2 = document.createElement("button");
-		el2.onclick = function(){ this.osbLayer.createBug(lonlatApi, inputDescription.value); marker.feature = null; feature.destroy(); };
+		el2.type = "submit";
 		el2.appendChild(document.createTextNode("Create"));
 		el1.appendChild(el2);
-		newContent.appendChild(el1);
+		el_form.appendChild(el1);
+		newContent.appendChild(el_form);
 
 		feature.data.popupContentHTML = newContent;
 		var popup = feature.createPopup(true);
@@ -584,13 +677,30 @@ OpenLayers.Popup.FramedCloud.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Po
 
 function putAJAXMarker(id, lon, lat, text, closed)
 {
+	var comments = text.split(/<hr \/>/);
+	for(var i=0; i<comments.length; i++)
+		comments[i] = comments[i].replace("&quot;", "\"").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
 	putAJAXMarker.bugs[id] = [
 		new OpenLayers.LonLat(lon, lat),
-		text.split(/<hr \/>/),
-		status
+		comments,
+		closed
 	];
 	for(var i=0; i<putAJAXMarker.layers.length; i++)
 		putAJAXMarker.layers[i].createMarker(id);
+}
+
+/**
+ * This global function is executed by the OpenStreetBugs API. The “create bug”, “comment” and “close bug” scripts execute it to give information about their success.
+ * In case of success, this function is called without a parameter, in case of an error, the error message is passed. This is lousy workaround to make it any functional at all, the OSB API is likely to be extended later (then it will provide additional information such as the ID of a created bug and similar).
+*/
+
+function osbResponse(error)
+{
+	if(error)
+		alert("Error: "+error);
+
+	for(var i=0; i<putAJAXMarker.layers.length; i++)
+		putAJAXMarker.layers[i].loadBugs();
 }
 
 putAJAXMarker.layers = [ ];
