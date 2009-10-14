@@ -1,3 +1,15 @@
+/*
+	This OpenStreetBugs client is free software: you can redistribute it
+	and/or modify it under the terms of the GNU Affero General Public License
+	as published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	This file is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+	or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public
+	License <http://www.gnu.org/licenses/> for more details.
+*/
+
 /**
  * A fully functional OpenStreetBugs layer. See http://openstreetbugs.schokokeks.org/.
  * Even though the OpenStreetBugs API originally does not intend this, you can create multiple instances of this Layer and add them to different maps (or to one single map for whatever crazy reason) without problems.
