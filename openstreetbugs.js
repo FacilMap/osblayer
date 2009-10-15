@@ -365,7 +365,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 			el2 = document.createElement("li");
 			el3 = document.createElement("button");
-			el3.onclick = function(){ layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
+			el3.onclick = function(){ this.form.submit(); layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
 			el3.appendChild(document.createTextNode("Mark as fixed"));
 			el2.appendChild(el3);
 			el1.appendChild(el2);
