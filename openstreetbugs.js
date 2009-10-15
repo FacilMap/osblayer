@@ -83,12 +83,10 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 	/**
 	 * @param String name
-	 * @param Boolean readonly If this is set to true, there will be no buttons to add comments or to close a bug.
 	*/
-	initialize : function(name, readonly, options)
+	initialize : function(name, options)
 	{
 		OpenLayers.Layer.Markers.prototype.initialize.apply(this, [ name, OpenLayers.Util.extend({ opacity: 0.7, projection: new OpenLayers.Projection("EPSG:4326") }, options) ]);
-		this.readonly = readonly;
 		putAJAXMarker.layers.push(this);
 		this.events.addEventType("markerAdded");
 
