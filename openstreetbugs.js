@@ -126,7 +126,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	apiRequest : function(url) {
 		var script = document.createElement("script");
 		script.type = "text/javascript";
-		script.src = this.serverURL + url;
+		script.src = this.serverURL + url + "&nocache="+(new Date()).getTime();
 		document.body.appendChild(script);
 	},
 
@@ -178,9 +178,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		for(var i=0; i<this.markers.length; i++)
 		{
 			if(!this.markers[i].feature.popup) continue;
-			var els = this.markers[i].feature.popup.contentDom.getElementsByClassName("osbUsername");
+			var els = this.markers[i].feature.popup.contentDom.getElementsByTagName("input");
 			for(var j=0; j<els.length; j++)
+			{
+				if(els[j].className != "osbUsername") continue;
 				els[j].value = username;
+			}
 		}
 	},
 
@@ -324,9 +327,10 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		else if(!this.readonly)
 		{
 			el1 = document.createElement("div");
-			el2 = document.createElement("button");
+			el2 = document.createElement("input");
+			el2.type = "button";
 			el2.onclick = function(){ displayChange(); };
-			el2.appendChild(document.createTextNode("Comment/Close"));
+			el2.value = "Comment/Close";
 			el1.appendChild(el2);
 			containerDescription.appendChild(el1);
 
@@ -357,25 +361,27 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el1 = document.createElement("ul");
 			el1.className = "buttons";
 			el2 = document.createElement("li");
-			el3 = document.createElement("button");
-			el3.type = "submit";
-			el3.appendChild(document.createTextNode("Add comment"));
+			el3 = document.createElement("input");
+			el3.setAttribute("type", "submit");
+			el3.value = "Add comment";
 			el2.appendChild(el3);
 			el1.appendChild(el2);
 
 			el2 = document.createElement("li");
-			el3 = document.createElement("button");
-			el3.onclick = function(){ this.form.submit(); layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
-			el3.appendChild(document.createTextNode("Mark as fixed"));
+			el3 = document.createElement("input");
+			el3.setAttribute("type", "button");
+			el3.onclick = function(){ this.form.onsubmit(); layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
+			el3.value = "Mark as fixed";
 			el2.appendChild(el3);
 			el1.appendChild(el2);
 			el_form.appendChild(el1);
 			containerChange.appendChild(el_form);
 
 			el1 = document.createElement("div");
-			el2 = document.createElement("button");
+			el2 = document.createElement("input");
+			el2.setAttribute("type", "button");
 			el2.onclick = function(){ displayDescription(); };
-			el2.appendChild(document.createTextNode("Cancel"));
+			el2.value = "Cancel";
 			el1.appendChild(el2);
 			containerChange.appendChild(el1);
 		}
@@ -599,9 +605,9 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		el_form.appendChild(el1);
 
 		el1 = document.createElement("div");
-		el2 = document.createElement("button");
-		el2.type = "submit";
-		el2.appendChild(document.createTextNode("Create"));
+		el2 = document.createElement("input");
+		el2.setAttribute("type", "submit");
+		el2.value = "Create";
 		el1.appendChild(el2);
 		el_form.appendChild(el1);
 		newContent.appendChild(el_form);
