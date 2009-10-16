@@ -280,7 +280,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		var newContent = document.createElement("div");
 
 		el1 = document.createElement("h3");
-		el1.appendChild(document.createTextNode((closed ? "Fixed" : "Unresolved")+" Error"));
+		el1.appendChild(document.createTextNode(closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error")));
 		newContent.appendChild(el1);
 
 		var containerDescription = document.createElement("div");
@@ -306,7 +306,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		{
 			el2 = document.createElement("dt");
 			el2.className = (i == 0 ? "osb-description" : "osb-comment");
-			el2.appendChild(document.createTextNode(i == 0 ? "Description" : "Comment"));
+			el2.appendChild(document.createTextNode(i == 0 ? OpenLayers.i18n("Description") : OpenLayers.i18n("Comment")));
 			el1.appendChild(el2);
 			el2 = document.createElement("dd");
 			el2.className = (i == 0 ? "osb-description" : "osb-comment");
@@ -320,7 +320,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el1 = document.createElement("p");
 			el1.className = "osb-fixed";
 			el2 = document.createElement("em");
-			el2.appendChild(document.createTextNode("This error has been fixed already. However, it might take a couple of days before the map image is updated."));
+			el2.appendChild(document.createTextNode(OpenLayers.i18n("Has been fixed.")));
 			el1.appendChild(el2);
 			containerDescription.appendChild(el1);
 		}
@@ -328,9 +328,9 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		{
 			el1 = document.createElement("div");
 			el2 = document.createElement("input");
-			el2.type = "button";
+			el2.setAttribute("type", "button");
 			el2.onclick = function(){ displayChange(); };
-			el2.value = "Comment/Close";
+			el2.value = OpenLayers.i18n("Comment/Close");
 			el1.appendChild(el2);
 			containerDescription.appendChild(el1);
 
@@ -339,7 +339,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 			el1 = document.createElement("dl");
 			el2 = document.createElement("dt");
-			el2.appendChild(document.createTextNode("Nickname"));
+			el2.appendChild(document.createTextNode(OpenLayers.i18n("Nickname")));
 			el1.appendChild(el2);
 			el2 = document.createElement("dd");
 			var inputUsername = document.createElement("input");
@@ -350,7 +350,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el1.appendChild(el2);
 
 			el2 = document.createElement("dt");
-			el2.appendChild(document.createTextNode("Comment"));
+			el2.appendChild(document.createTextNode(OpenLayers.i18n("Comment")));
 			el1.appendChild(el2);
 			el2 = document.createElement("dd");
 			var inputComment = document.createElement("input");
@@ -363,7 +363,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el2 = document.createElement("li");
 			el3 = document.createElement("input");
 			el3.setAttribute("type", "submit");
-			el3.value = "Add comment";
+			el3.value = OpenLayers.i18n("Add comment");
 			el2.appendChild(el3);
 			el1.appendChild(el2);
 
@@ -371,7 +371,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el3 = document.createElement("input");
 			el3.setAttribute("type", "button");
 			el3.onclick = function(){ this.form.onsubmit(); layer.closeBug(id); layer.bugs[id].popup.hide(); return false; };
-			el3.value = "Mark as fixed";
+			el3.value = OpenLayers.i18n("Mark as fixed");
 			el2.appendChild(el3);
 			el1.appendChild(el2);
 			el_form.appendChild(el1);
@@ -381,7 +381,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			el2 = document.createElement("input");
 			el2.setAttribute("type", "button");
 			el2.onclick = function(){ displayDescription(); };
-			el2.value = "Cancel";
+			el2.value = OpenLayers.i18n("Cancel");
 			el1.appendChild(el2);
 			containerChange.appendChild(el1);
 		}
@@ -514,7 +514,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 */
 
 OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
-	title : "Create OpenStreetBug",
+	title : null, // See below because of translation call
 
 	/**
 	 * The icon to be used for the temporary markers that the “create bug” popup belongs to.
@@ -533,6 +533,8 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 	*/
 	initialize: function(osbLayer, options) {
 		this.osbLayer = osbLayer;
+
+		this.title = OpenLayers.i18n("Create OpenStreetBug");
 
 		OpenLayers.Control.prototype.initialize.apply(this, [ options ]);
 
@@ -577,7 +579,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		var newContent = document.createElement("div");
 		var el1,el2,el3;
 		el1 = document.createElement("h3");
-		el1.appendChild(document.createTextNode("Create bug"));
+		el1.appendChild(document.createTextNode(OpenLayers.i18n("Create bug")));
 		newContent.appendChild(el1);
 
 		var el_form = document.createElement("form");
@@ -585,7 +587,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 
 		el1 = document.createElement("dl");
 		el2 = document.createElement("dt");
-		el2.appendChild(document.createTextNode("Nickname"));
+		el2.appendChild(document.createTextNode(OpenLayers.i18n("Nickname")));
 		el1.appendChild(el2);
 		el2 = document.createElement("dd");
 		var inputUsername = document.createElement("input");
@@ -596,7 +598,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		el1.appendChild(el2);
 
 		el2 = document.createElement("dt");
-		el2.appendChild(document.createTextNode("Bug description"));
+		el2.appendChild(document.createTextNode(OpenLayers.i18n("Bug description")));
 		el1.appendChild(el2);
 		el2 = document.createElement("dd");
 		var inputDescription = document.createElement("input");
@@ -607,7 +609,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		el1 = document.createElement("div");
 		el2 = document.createElement("input");
 		el2.setAttribute("type", "submit");
-		el2.value = "Create";
+		el2.value = OpenLayers.i18n("Create");
 		el1.appendChild(el2);
 		el_form.appendChild(el1);
 		newContent.appendChild(el_form);
@@ -685,6 +687,25 @@ OpenLayers.Popup.FramedCloud.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Po
 });
 
 /**
+ * Necessary improvement to the translate function: Fall back to default language if translated string is not
+ * available (see http://trac.openlayers.org/ticket/2308).
+*/
+
+OpenLayers.i18n = OpenLayers.Lang.translate = function(key, context) {
+	var message = OpenLayers.Lang[OpenLayers.Lang.getCode()][key];
+	if(!message)
+	{
+		if(OpenLayers.Lang[OpenLayers.Lang.defaultCode][key])
+			message = OpenLayers.Lang[OpenLayers.Lang.defaultCode][key];
+		else
+			message = key;
+	}
+	if(context)
+		message = OpenLayers.String.format(message, context);
+	return message;
+};
+
+/**
  * This global function is executed by the OpenStreetBugs API getBugs script.
  * Each OpenStreetBugs layer adds itself to the putAJAXMarker.layer array. The putAJAXMarker() function executes the createMarker() method
  * on each layer in that array each time it is called. This has the side-effect that bugs displayed in one map on a page are already loaded
@@ -721,3 +742,40 @@ function osbResponse(error)
 
 putAJAXMarker.layers = [ ];
 putAJAXMarker.bugs = { };
+
+
+/* Translations */
+
+OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
+	"Fixed Error" : "Fixed Error",
+	"Unresolved Error" : "Unresolved Error",
+	"Description" : "Description",
+	"Comment" : "Comment",
+	"Has been fixed." : "This error has been fixed already. However, it might take a couple of days before the map image is updated.",
+	"Comment/Close" : "Comment/Close",
+	"Nickname" : "Nickname",
+	"Add comment" : "Add comment",
+	"Mark as fixed" : "Mark as fixed",
+	"Cancel" : "Cancel",
+	"Create OpenStreetBug" : "Create OpenStreetBug",
+	"Create bug" : "Create bug",
+	"Bug description" : "Bug description",
+	"Create" : "Create"
+});
+
+OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
+	"Fixed Error" : "Behobener Fehler",
+	"Unresolved Error" : "Offener Fehler",
+	"Description" : "Beschreibung",
+	"Comment" : "Kommentar",
+	"Has been fixed." : "Der Fehler wurde bereits behoben. Es kann jedoch bis zu einigen Tagen dauern, bis die Kartenansicht aktualisiert wird.",
+	"Comment/Close" : "Kommentieren/Schließen",
+	"Nickname" : "Benutzername",
+	"Add comment" : "Kommentar hinzufügen",
+	"Mark as fixed" : "Als behoben markieren",
+	"Cancel" : "Abbrechen",
+	"Create OpenStreetBug" : "OpenStreetBug melden",
+	"Create bug" : "Bug anlegen",
+	"Bug description" : "Fehlerbeschreibung",
+	"Create" : "Anlegen"
+});
