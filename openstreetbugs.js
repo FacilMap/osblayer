@@ -645,8 +645,10 @@ OpenLayers.Popup.FramedCloud.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Po
 		// Unset original contentHTML parameter
 		args[3] = null;
 
+		var closeCallback = arguments[6];
+
 		// Add close event trigger to the closeBoxCallback parameter
-		args[6] = function(e){ if(arguments[6]) arguments[6](); OpenLayers.Event.stop(e); this.events.triggerEvent("close"); };
+		args[6] = function(e){ if(closeCallback) closeCallback(); OpenLayers.Event.stop(e); this.events.triggerEvent("close"); };
 
 		OpenLayers.Popup.FramedCloud.prototype.initialize.apply(this, args);
 
