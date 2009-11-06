@@ -82,6 +82,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	cookiePath : null,
 
 	/**
+	 * A URL to append lon=123&lat=123&zoom=123 for the Permalinks.
+	 * @var String
+	*/
+	permalinkURL : "http://www.openstreetmap.org/",
+
+	/**
 	 * @param String name
 	*/
 	initialize : function(name, options)
@@ -246,7 +252,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 				return;
 		}
 
-		var lonlat = putAJAXMarker.bugs[id][0].transform(this.apiProjection, this.map.getProjectionObject());
+		var lonlat = putAJAXMarker.bugs[id][0].clone().transform(this.apiProjection, this.map.getProjectionObject());
 		var comments = putAJAXMarker.bugs[id][1];
 		var closed = putAJAXMarker.bugs[id][2];
 		var feature = new OpenLayers.Feature(this, lonlat, { icon: (closed ? this.iconClosed : this.iconOpen).clone(), autoSize: true });
@@ -280,7 +286,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		var newContent = document.createElement("div");
 
 		el1 = document.createElement("h3");
-		el1.appendChild(document.createTextNode(closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error")));
+		el1.appendChild(document.createTextNode((closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error"))+" ["));
+		el2 = document.createElement("a");
+		el2.href = this.permalinkURL + (this.permalinkURL.indexOf("?") == -1 ? "?" : "&") + "lon="+putAJAXMarker.bugs[id][0].lon+"&lat="+putAJAXMarker.bugs[id][0].lat+"&zoom=15";
+		el2.appendChild(document.createTextNode(OpenLayers.i18n("Permalink")));
+		el1.appendChild(el2);
+		el1.appendChild(document.createTextNode("]"));
 		newContent.appendChild(el1);
 
 		var containerDescription = document.createElement("div");
@@ -762,7 +773,8 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 	"Create OpenStreetBug" : "Create OpenStreetBug",
 	"Create bug" : "Create bug",
 	"Bug description" : "Bug description",
-	"Create" : "Create"
+	"Create" : "Create",
+	"Permalink" : "Permalink"
 });
 
 OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
@@ -779,5 +791,6 @@ OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
 	"Create OpenStreetBug" : "OpenStreetBug melden",
 	"Create bug" : "Bug anlegen",
 	"Bug description" : "Fehlerbeschreibung",
-	"Create" : "Anlegen"
+	"Create" : "Anlegen",
+	"Permalink" : "Permalink"
 });
