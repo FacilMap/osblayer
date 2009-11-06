@@ -286,12 +286,16 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		var newContent = document.createElement("div");
 
 		el1 = document.createElement("h3");
-		el1.appendChild(document.createTextNode((closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error"))+" ["));
-		el2 = document.createElement("a");
-		el2.href = this.permalinkURL + (this.permalinkURL.indexOf("?") == -1 ? "?" : "&") + "lon="+putAJAXMarker.bugs[id][0].lon+"&lat="+putAJAXMarker.bugs[id][0].lat+"&zoom=15";
-		el2.appendChild(document.createTextNode(OpenLayers.i18n("Permalink")));
-		el1.appendChild(el2);
-		el1.appendChild(document.createTextNode("]"));
+		el1.appendChild(document.createTextNode(closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error")));
+		if(this.permalinkURL)
+		{
+			el1.appendChild(document.createTextNode(" ["));
+			el2 = document.createElement("a");
+			el2.href = this.permalinkURL + (this.permalinkURL.indexOf("?") == -1 ? "?" : "&") + "lon="+putAJAXMarker.bugs[id][0].lon+"&lat="+putAJAXMarker.bugs[id][0].lat+"&zoom=15";
+			el2.appendChild(document.createTextNode(OpenLayers.i18n("Permalink")));
+			el1.appendChild(el2);
+			el1.appendChild(document.createTextNode("]"));
+		}
 		newContent.appendChild(el1);
 
 		var containerDescription = document.createElement("div");
