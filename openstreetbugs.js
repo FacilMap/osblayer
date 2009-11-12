@@ -287,6 +287,15 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 		el1 = document.createElement("h3");
 		el1.appendChild(document.createTextNode(closed ? OpenLayers.i18n("Fixed Error") : OpenLayers.i18n("Unresolved Error")));
+
+		el1.appendChild(document.createTextNode(" ["));
+		el2 = document.createElement("a");
+		el2.href = "#";
+		el2.onclick = function(){ layer.map.setCenter(putAJAXMarker.bugs[id][0].clone().transform(layer.apiProjection, layer.map.getProjectionObject()), 15); };
+		el2.appendChild(document.createTextNode(OpenLayers.i18n("Zoom")));
+		el1.appendChild(el2);
+		el1.appendChild(document.createTextNode("]"));
+
 		if(this.permalinkURL)
 		{
 			el1.appendChild(document.createTextNode(" ["));
@@ -460,7 +469,10 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	showPopup: function(id) {
 		var add = null;
 		if(!this.bugs[id].popup)
-			add = this.bugs[id].createPopup(false);
+		{
+			add = this.bugs[id].createPopup(true);
+			add.events.register("close", this, function(){ this.resetPopupContent(id); if(this.bugs[id].osbClicked) this.bugs[id].osbClicked = false; });
+		}
 		else if(this.bugs[id].popup.visible())
 			return;
 
@@ -479,10 +491,8 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		if(!this.bugs[id].popup || !this.bugs[id].popup.visible())
 			return;
 
-		this.resetPopupContent(id);
 		this.bugs[id].popup.hide();
-		if(this.bugs[id].osbClicked)
-			this.bugs[id].osbClicked = false;
+		this.bugs[id].popup.events.triggerEvent("close");
 	},
 
 	/**
@@ -663,7 +673,7 @@ OpenLayers.Popup.FramedCloud.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Po
 		var closeCallback = arguments[6];
 
 		// Add close event trigger to the closeBoxCallback parameter
-		args[6] = function(e){ if(closeCallback) closeCallback(); OpenLayers.Event.stop(e); this.events.triggerEvent("close"); };
+		args[6] = function(e){ if(closeCallback) closeCallback(); else this.hide(); OpenLayers.Event.stop(e); this.events.triggerEvent("close"); };
 
 		OpenLayers.Popup.FramedCloud.prototype.initialize.apply(this, args);
 
@@ -733,7 +743,7 @@ function putAJAXMarker(id, lon, lat, text, closed)
 {
 	var comments = text.split(/<hr \/>/);
 	for(var i=0; i<comments.length; i++)
-		comments[i] = comments[i].replace("&quot;", "\"").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+		comments[i] = comments[i].replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 	putAJAXMarker.bugs[id] = [
 		new OpenLayers.LonLat(lon, lat),
 		comments,
@@ -778,7 +788,8 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 	"Create bug" : "Create bug",
 	"Bug description" : "Bug description",
 	"Create" : "Create",
-	"Permalink" : "Permalink"
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
 });
 
 OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
@@ -796,5 +807,6 @@ OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
 	"Create bug" : "Bug anlegen",
 	"Bug description" : "Fehlerbeschreibung",
 	"Create" : "Anlegen",
-	"Permalink" : "Permalink"
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
 });
