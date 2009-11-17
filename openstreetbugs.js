@@ -88,6 +88,12 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	permalinkURL : "http://www.openstreetmap.org/",
 
 	/**
+	 * A CSS file to be included. Set to null if you don’t need this.
+	 * @var String
+	*/
+	theme : "http://osm.cdauth.de/map/openstreetbugs.css",
+
+	/**
 	 * @param String name
 	*/
 	initialize : function(name, options)
@@ -109,6 +115,29 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 				break;
 			}
 		}
+
+		/* Copied from OpenLayers.Map */
+		if(this.theme) {
+            // check existing links for equivalent url
+            var addNode = true;
+            var nodes = document.getElementsByTagName('link');
+            for(var i=0, len=nodes.length; i<len; ++i) {
+                if(OpenLayers.Util.isEquivalentUrl(nodes.item(i).href,
+                                                   this.theme)) {
+                    addNode = false;
+                    break;
+                }
+            }
+            // only add a new node if one with an equivalent url hasn't already
+            // been added
+            if(addNode) {
+                var cssNode = document.createElement('link');
+                cssNode.setAttribute('rel', 'stylesheet');
+                cssNode.setAttribute('type', 'text/css');
+                cssNode.setAttribute('href', this.theme);
+                document.getElementsByTagName('head')[0].appendChild(cssNode);
+            }
+        }
 	},
 
 	/**
@@ -663,6 +692,8 @@ OpenLayers.Popup.FramedCloud.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Po
 	 * See OpenLayers.Popup.FramedCloud.initialize() for parameters. As fourth parameter, pass a DOM node instead of a string.
 	*/
 	initialize: function() {
+		this.displayClass = this.displayClass + " " + this.CLASS_NAME.replace("OpenLayers.", "ol").replace(/\./g, "");
+
 		var args = new Array(arguments.length);
 		for(var i=0; i<arguments.length; i++)
 			args[i] = arguments[i];
