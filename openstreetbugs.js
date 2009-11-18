@@ -879,3 +879,22 @@ OpenLayers.Lang.nl = OpenLayers.Util.extend(OpenLayers.Lang.nl, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.it = OpenLayers.Util.extend(OpenLayers.Lang.it, {
+	"Fixed Error" : "Sbaglio coretto",
+	"Unresolved Error" : "Sbaglio non coretto",
+	"Description" : "Descrizione",
+	"Comment" : "Commento",
+	"Has been fixed." : "Questo sbaglio è già coretto. Forse ci metto qualche giorni per aggiornare anche i quadri.",
+	"Comment/Close" : "Commenta/Chiude",
+	"Nickname" : "Nome",
+	"Add comment" : "Aggiunge commento",
+	"Mark as fixed" : "Marca che è coretto",
+	"Cancel" : "Annulla",
+	"Create OpenStreetBug" : "Aggiunge OpenStreetBug",
+	"Create bug" : "Aggiunge un sbaglio",
+	"Bug description" : "Descrizione del sbaglio",
+	"Create" : "Aggiunge",
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
+});
