@@ -841,3 +841,22 @@ OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.nl = OpenLayers.Util.extend(OpenLayers.Lang.nl, {
+	"Fixed Error" : "Fout verholpen",
+	"Unresolved Error" : "Openstaande fout",
+	"Description" : "Beschrijving",
+	"Comment" : "Kommentaar",
+	"Has been fixed." : "De fout is al eerder opgelost. Het kan echter nog een paar dagen duren voordat het kaartmateriaal geactualiseerd is.",
+	"Comment/Close" : "Bekommentariëren/Sluiten",
+	"Nickname" : "Gebruikersnaam",
+	"Add comment" : "Kommentaar toevoegen",
+	"Mark as fixed" : "Als opgelost aanmerken",
+	"Cancel" : "Afbreken",
+	"Create OpenStreetBug" : "OpenStreetBug melden",
+	"Create bug" : "Bug melden",
+	"Bug description" : "Foutomschrijving",
+	"Create" : "Aanmaken",
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
+});
