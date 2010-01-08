@@ -898,3 +898,22 @@ OpenLayers.Lang.it = OpenLayers.Util.extend(OpenLayers.Lang.it, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.ro = OpenLayers.Util.extend(OpenLayers.Lang.ro, {
+	"Fixed Error" : "Eroare rezolvată",
+	"Unresolved Error" : "Eroare nerezolvată",
+	"Description" : "Descriere",
+	"Comment" : "Comentariu",
+	"Has been fixed." : "Această eroare a fost rezolvată. Totuși este posibil să dureze câteva zile până când imaginea hărții va fi actualizată.",
+	"Comment/Close" : "Comentariu/Închide",
+	"Nickname" : "Nume",
+	"Add comment" : "Adaugă comentariu",
+	"Mark as fixed" : "Marchează ca rezolvată",
+	"Cancel" : "Anulează",
+	"Create OpenStreetBug" : "Crează OpenStreetBug",
+	"Create bug" : "Adaugă eroare",
+	"Bug description" : "Descrierea erorii",
+	"Create" : "Adaugă",
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
+});
