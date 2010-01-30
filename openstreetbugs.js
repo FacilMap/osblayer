@@ -583,7 +583,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 	osbLayer : null,
 
 	/**
-	 * @var OpenLayers.Layer.OpenStreetBugs osbLayer The OpenStreetBugs layer that this control will be connected to.
+	 * @param OpenLayers.Layer.OpenStreetBugs osbLayer The OpenStreetBugs layer that this control will be connected to.
 	*/
 	initialize: function(osbLayer, options) {
 		this.osbLayer = osbLayer;
