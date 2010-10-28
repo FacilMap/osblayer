@@ -91,7 +91,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * A CSS file to be included. Set to null if you don’t need this.
 	 * @var String
 	*/
-	theme : "http://osm.cdauth.de/map/openstreetbugs.css",
+	theme : "http://osm.cdauth.eu/openstreetbugs/openstreetbugs.css",
 
 	/**
 	 * @param String name
