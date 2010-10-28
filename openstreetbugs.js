@@ -936,3 +936,22 @@ OpenLayers.Lang.hu = OpenLayers.Util.extend(OpenLayers.Lang.hu, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Nagyítás"
 });
+
+OpenLayers.Lang.es = OpenLayers.Util.extend(OpenLayers.Lang.es, {
+	"Fixed Error" : "Error Corregido",
+	"Unresolved Error" : "Error sin corregir",
+	"Description" : "Descripción",
+	"Comment" : "Comentario",
+	"Has been fixed." : "Este error ya ha sido corregido. De todas formas, puede que tarde un par de días antes de que la imagen del mapa se actualice.",
+	"Comment/Close" : "Comentario/Cerrado",
+	"Nickname" : "Nombre usuario",
+	"Add comment" : "Añadir comentario",
+	"Mark as fixed" : "Marcar como corregido",
+	"Cancel" : "Cancelar",
+	"Create OpenStreetBug" : "Crear OpenStreetBug",
+	"Create bug" : "Crear bug",
+	"Bug description" : "Descripcion del bug",
+	"Create" : "Crear",
+	"Permalink" : "Permalink",
+	"Zoom" : "Zoom"
+});
