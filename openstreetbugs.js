@@ -917,3 +917,22 @@ OpenLayers.Lang.ro = OpenLayers.Util.extend(OpenLayers.Lang.ro, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.hu = OpenLayers.Util.extend(OpenLayers.Lang.hu, {
+	"Fixed Error" : "Javított hiba",
+	"Unresolved Error" : "Megoldatlan hiba",
+	"Description" : "Leírás",
+	"Comment" : "Megjegyzés",
+	"Has been fixed." : "Ezt a hibát már javították, azonban eltarthat néhány napig, mire a térkép frissül.",
+	"Comment/Close" : "Megjegyzés/Bezárás",
+	"Nickname" : "Becenév",
+	"Add comment" : "Megjegyzés hozzáadása",
+	"Mark as fixed" : "Jelölés javítottként",
+	"Cancel" : "Mégse",
+	"Create OpenStreetBug" : "OpenStreetBug létrehozása",
+	"Create bug" : "Hiba létrehozása",
+	"Bug description" : "Hiba leírása",
+	"Create" : "Létrehozás",
+	"Permalink" : "Permalink",
+	"Zoom" : "Nagyítás"
+});
