@@ -89,11 +89,6 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	*/
 	permalinkURL : "http://www.openstreetmap.org/",
 
-	/**
-	 * A CSS file to be included. Set to null if you don’t need this.
-	 * @var String
-	*/
-	theme : "http://api.facilmap.org/osblayer/osblayer.css",
 
 	/**
 	 * @param String name
@@ -118,28 +113,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 			}
 		}
 
-		/* Copied from OpenLayers.Map */
-		if(this.theme) {
-            // check existing links for equivalent url
-            var addNode = true;
-            var nodes = document.getElementsByTagName('link');
-            for(var i=0, len=nodes.length; i<len; ++i) {
-                if(OpenLayers.Util.isEquivalentUrl(nodes.item(i).href,
-                                                   this.theme)) {
-                    addNode = false;
-                    break;
-                }
-            }
-            // only add a new node if one with an equivalent url hasn't already
-            // been added
-            if(addNode) {
-                var cssNode = document.createElement('link');
-                cssNode.setAttribute('rel', 'stylesheet');
-                cssNode.setAttribute('type', 'text/css');
-                cssNode.setAttribute('href', this.theme);
-                document.getElementsByTagName('head')[0].appendChild(cssNode);
-            }
-        }
+		OpenLayers.Layer.OpenStreetBugs.setCSS();
 	},
 
 	/**
@@ -563,6 +537,38 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 
 	CLASS_NAME: "OpenLayers.Layer.OpenStreetBugs"
 });
+
+/**
+ * Is called by the initialize() function and adds the stylesheets to the document.
+*/
+OpenLayers.Layer.OpenStreetBugs.setCSS = function() {
+	if(OpenLayers.Layer.OpenStreetBugs.setCSS.done)
+		return;
+	else
+		OpenLayers.Layer.OpenStreetBugs.setCSS.done = true;
+
+	// See http://www.hunlock.com/blogs/Totally_Pwn_CSS_with_Javascript
+	var idx = 0;
+	var addRule = function(selector, rules) {
+		var s = document.styleSheets[0];
+		var rule;
+		if(s.addRule) // M$IE
+			rule = s.addRule(selector, rules, idx);
+		else
+			rule = s.insertRule(selector + " { " + rules + " }", idx);
+		OpenLayers.Util.extend(s.style, rules);
+		idx++;
+	};
+
+	addRule(".olPopupFramedCloudOpenStreetBugs dl", 'margin:0; padding:0;');
+	addRule(".olPopupFramedCloudOpenStreetBugs dt", 'margin:0; padding:0; font-weight:bold; float:left; clear:left;');
+	addRule(".olPopupFramedCloudOpenStreetBugs dt:after", 'content: ": ";');
+	addRule("* html .olPopupFramedCloudOpenStreetBugs dt", 'margin-right:1ex;');
+	addRule(".olPopupFramedCloudOpenStreetBugs dd", 'margin:0; padding:0;');
+	addRule(".olPopupFramedCloudOpenStreetBugs ul.buttons", 'list-style-type:none; padding:0; margin:0;');
+	addRule(".olPopupFramedCloudOpenStreetBugs ul.buttons li", 'display:inline; margin:0; padding:0;');
+	addRule(".olPopupFramedCloudOpenStreetBugs h3", 'font-size:1.2em; margin:.2em 0 .7em 0;');
+};
 
 /**
  * An OpenLayers control to create new bugs on mouse clicks on the map. Add an instance of this to your map using
