@@ -89,13 +89,15 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	*/
 	permalinkURL : "http://www.openstreetmap.org/",
 
+	opacity : 0.7,
+	projection : new OpenLayers.Projection("EPSG:4326"),
 
 	/**
 	 * @param String name
 	*/
 	initialize : function(name, options)
 	{
-		OpenLayers.Layer.Markers.prototype.initialize.apply(this, [ name, OpenLayers.Util.extend({ opacity: 0.7, projection: new OpenLayers.Projection("EPSG:4326") }, options) ]);
+		OpenLayers.Layer.Markers.prototype.initialize.apply(this, arguments);
 		putAJAXMarker.layers.push(this);
 		this.events.addEventType("markerAdded");
 
@@ -134,7 +136,8 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 	 * This method creates a new script HTML element that imports the API request URL. The API JavaScript response then executes the global functions provided below.
 	 * @param String url The URL this.serverURL + url is requested.
 	*/
-	apiRequest : function(url) {
+	apiRequest : function(url)
+	{
 		var script = document.createElement("script");
 		script.type = "text/javascript";
 		script.src = this.serverURL + url + "&nocache="+(new Date()).getTime();
