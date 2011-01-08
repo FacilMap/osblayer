@@ -254,29 +254,50 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		{
 			if(this.bugs[id].popup && !this.bugs[id].popup.visible())
 				this.setPopupContent(id);
-			if(this.bugs[id].closed != putAJAXMarker.bugs[id][2])
+			if(this.bugs[id].osbClosed != putAJAXMarker.bugs[id][2])
 				this.bugs[id].destroy();
 			else
 				return;
 		}
 
-		var lonlat = putAJAXMarker.bugs[id][0].clone().transform(this.apiProjection, this.map.getProjectionObject());
-		var comments = putAJAXMarker.bugs[id][1];
-		var closed = putAJAXMarker.bugs[id][2];
-		var feature = new OpenLayers.Feature(this, lonlat, { icon: (closed ? this.iconClosed : this.iconOpen).clone(), autoSize: true });
-		feature.popupClass = OpenLayers.Popup.FramedCloud.OpenStreetBugs;
+		var feature = this._createMarker(id, putAJAXMarker.bugs[id][0], putAJAXMarker.bugs[id][1], putAJAXMarker.bugs[id][2], (putAJAXMarker.bugs[id][2] ? this.iconClosed : this.iconOpen).clone());
 		feature.osbId = id;
-		feature.closed = closed;
-
-		var marker = feature.createMarker();
-		marker.feature = feature;
-		marker.events.register("click", feature, this.markerClick);
-		marker.events.register("mouseover", feature, this.markerMouseOver);
-		marker.events.register("mouseout", feature, this.markerMouseOut);
-		this.addMarker(marker);
+		feature.osbClosed = putAJAXMarker.bugs[id][2];
+		feature.marker.feature = feature;
+		feature.marker.events.registerPriority("click", feature, this.markerClick);
+		feature.marker.events.register("mouseover", feature, this.markerMouseOver);
+		feature.marker.events.register("mouseout", feature, this.markerMouseOut);
 
 		this.bugs[id] = feature;
+
 		this.events.triggerEvent("markerAdded");
+	},
+
+	/**
+	 * Can be overloaded by subclasses in order to use a different marker creation mechanism. This does not create
+	 * the popup yet, that is created later using the createPopup() method of the returned feature. The parameters
+	 * about the popup content are only passed for the case that a special implementation needs them.
+	 *
+	 * The marker popup class has to support a DOM element as parameter for setContentHTML() and issue a "close" event
+	 * when the popup is closed, like {@link OpenLayers.Popup.FramedCloud.OpenStreetBugs} does.
+	 * @param Number id The bug ID or null when a bug is being created
+	 * @param LonLat lonlat The coordinates in {@link #apiProjection} projection
+	 * @param String comments The comments as HTML code or null when a bug is being created
+	 * @param Boolean closed Whether the bug is closed. null when the bug is being created
+	 * @param OpenLayers.Icon icon The suggested icon for the marker.
+	 * @return OpenLayers.Feature the feature with the marker and the popup
+	*/
+	_createMarker: function(id, lonlat, comments, closed, icon)
+	{
+		lonlat = lonlat.clone().transform(this.apiProjection, this.map.getProjectionObject());
+
+		var feature = new OpenLayers.Feature(this, lonlat, { icon: icon, autoSize: true });
+		feature.popupClass = OpenLayers.Popup.FramedCloud.OpenStreetBugs;
+
+		var marker = feature.createMarker();
+		this.addMarker(marker);
+
+		return feature;
 	},
 
 	/**
@@ -515,6 +536,7 @@ OpenLayers.Layer.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Layer.Markers,
 		else
 			feature.layer.hidePopup(feature.osbId);
 		OpenLayers.Event.stop(e);
+		return false;
 	},
 
 	/**
@@ -633,13 +655,9 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		if(!this.map) return true;
 
 		var control = this;
-		var lonlat = this.map.getLonLatFromViewPortPx(e.xy);
-		var lonlatApi = lonlat.clone().transform(this.map.getProjectionObject(), this.osbLayer.apiProjection);
-		var feature = new OpenLayers.Feature(this.osbLayer, lonlat, { icon: this.icon.clone(), autoSize: true });
-		feature.popupClass = OpenLayers.Popup.FramedCloud.OpenStreetBugs;
-		var marker = feature.createMarker();
-		marker.feature = feature;
-		this.osbLayer.addMarker(marker);
+		var lonlat = this.map.getLonLatFromViewPortPx(e.xy).transform(this.map.getProjectionObject(), this.osbLayer.apiProjection);
+		var feature = this.osbLayer._createMarker(null, lonlat, null, null, this.icon.clone());
+		feature.marker.feature = feature;
 
 		var newContent = document.createElement("div");
 		var el1,el2,el3;
@@ -648,7 +666,7 @@ OpenLayers.Control.OpenStreetBugs = new OpenLayers.Class(OpenLayers.Control, {
 		newContent.appendChild(el1);
 
 		var el_form = document.createElement("form");
-		el_form.onsubmit = function() { control.osbLayer.createBug(lonlatApi, inputDescription.value); marker.feature = null; feature.destroy(); return false; };
+		el_form.onsubmit = function() { control.osbLayer.createBug(lonlat, inputDescription.value); feature.marker.feature = null; feature.destroy(); return false; };
 
 		el1 = document.createElement("dl");
 		el2 = document.createElement("dt");
