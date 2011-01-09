@@ -9,7 +9,7 @@
 	or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public
 	License <http://www.gnu.org/licenses/> for more details.
 
-	Copyright © 2009–2010 Candid Dauth
+	Copyright © 2009–2011 Candid Dauth
 */
 
 /**
