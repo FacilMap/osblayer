@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!--
+	OpenStreetBugs layer is free software: you can redistribute it
+	and/or modify it under the terms of the GNU Affero General Public License
+	as published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	This file is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+	or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public
+	License <http://www.gnu.org/licenses/> for more details.
+
+	Copyright © 2009–2011 Candid Dauth
+-->
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<title>OpenStreetBugs example</title>
+		<script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
+		<script type="text/javascript" src="osblayer.js"></script>
+	</head>
+	<body>
+		<div id="map" style="position:absolute; top:0; left:0; height:100%; width:100%;"></div>
+		<script type="text/javascript"> // <![CDATA[
+			var map = new OpenLayers.Map("map");
+			map.addLayer(new OpenLayers.Layer.OSM());
+			map.setCenter(new OpenLayers.LonLat(0, 0).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), 2);
+
+			var osbLayer = new OpenLayers.Layer.OpenStreetBugs("OpenStreetBugs");
+			map.addLayer(osbLayer);
+
+			var osbControl = new OpenLayers.Control.OpenStreetBugs(osbLayer);
+			map.addControl(osbControl);
+			osbControl.activate();
+		// ]]>
+		</script>
+	</body>
+</html>
