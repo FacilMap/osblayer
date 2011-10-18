@@ -571,28 +571,20 @@ OpenLayers.Layer.OpenStreetBugs.setCSS = function() {
 		return;
 	else
 		OpenLayers.Layer.OpenStreetBugs.setCSS.done = true;
-
-	// See http://www.hunlock.com/blogs/Totally_Pwn_CSS_with_Javascript
-	var idx = 0;
-	var addRule = function(selector, rules) {
-		var s = document.styleSheets[0];
-		var rule;
-		if(s.addRule) // M$IE
-			rule = s.addRule(selector, rules, idx);
-		else
-			rule = s.insertRule(selector + " { " + rules + " }", idx);
-		OpenLayers.Util.extend(s.style, rules);
-		idx++;
-	};
-
-	addRule(".olPopupFramedCloudOpenStreetBugs dl", 'margin:0; padding:0;');
-	addRule(".olPopupFramedCloudOpenStreetBugs dt", 'margin:0; padding:0; font-weight:bold; float:left; clear:left;');
-	addRule(".olPopupFramedCloudOpenStreetBugs dt:after", 'content: ": ";');
-	addRule("* html .olPopupFramedCloudOpenStreetBugs dt", 'margin-right:1ex;');
-	addRule(".olPopupFramedCloudOpenStreetBugs dd", 'margin:0; padding:0;');
-	addRule(".olPopupFramedCloudOpenStreetBugs ul.buttons", 'list-style-type:none; padding:0; margin:0;');
-	addRule(".olPopupFramedCloudOpenStreetBugs ul.buttons li", 'display:inline; margin:0; padding:0;');
-	addRule(".olPopupFramedCloudOpenStreetBugs h3", 'font-size:1.2em; margin:.2em 0 .7em 0;');
+	
+	var rules = '.olPopupFramedCloudOpenStreetBugs dl { margin:0; padding:0; }' +
+	            '.olPopupFramedCloudOpenStreetBugs dt { margin:0; padding:0; font-weight:bold; float:left; clear:left; }' +
+	            '.olPopupFramedCloudOpenStreetBugs dt:after { content: ": "; }' +
+	            '* html .olPopupFramedCloudOpenStreetBugs dt { margin-right:1ex; }' +
+	            '.olPopupFramedCloudOpenStreetBugs dd { margin:0; padding:0; }' +
+	            '.olPopupFramedCloudOpenStreetBugs ul.buttons { list-style-type:none; padding:0; margin:0; }' +
+	            '.olPopupFramedCloudOpenStreetBugs ul.buttons li { display:inline; margin:0; padding:0; }' +
+	            '.olPopupFramedCloudOpenStreetBugs h3 { font-size:1.2em; margin:.2em 0 .7em 0; }';
+	
+	var st = document.createElement("style");
+	st.setAttribute("type", "text/css");
+	st.appendChild(document.createTextNode(rules));
+	document.getElementsByTagName("head")[0].appendChild(st);
 };
 
 /**
