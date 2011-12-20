@@ -976,3 +976,60 @@ OpenLayers.Lang.es = OpenLayers.Util.extend(OpenLayers.Lang.es, {
 	"Permalink" : "Permalink",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.lt = OpenLayers.Util.extend(OpenLayers.Lang.lt, {
+	"Fixed Error" : "Pataisyta klaida",
+	"Unresolved Error" : "Neišspręsta klaida",
+	"Description" : "Aprašymas",
+	"Comment" : "Komentaras",
+	"Has been fixed." : "Ši klaida jau pataisyta, bet gali užtrukti kelias dienas, kol žemėlapis bus atnaujintas.",
+	"Comment/Close" : "Komentuoti/Uždaryti",
+	"Nickname" : "Slapyvardis",
+	"Add comment" : "Pridėti komentarą",
+	"Mark as fixed" : "Pažymėti, kaip pataisytą",
+	"Cancel" : "Atšaukti",
+	"Create OpenStreetBug" : "Sukurti OpenStreetBug",
+	"Create bug" : "Pažymėti klaidą",
+	"Bug description" : "Klaidos aprašymas",
+	"Create" : "Sukurti",
+	"Permalink" : "Nuoroda",
+	"Zoom" : "Padidinti"
+});
+
+OpenLayers.Lang.vi = OpenLayers.Util.extend(OpenLayers.Lang.vi, {
+	"Fixed Error" : "Lỗi đã sửa",
+	"Unresolved Error" : "Lỗi cần sửa",
+	"Description" : "Miêu tả",
+	"Comment" : "Bình luận",
+	"Has been fixed." : "Lỗi này đã được sửa. Tuy nhiên, có thể cần chờ vài ngày cho bản đồ được cập nhật.",
+	"Comment/Close" : "Bình luận/Đóng",
+	"Nickname" : "Tên hiệu",
+	"Add comment" : "Thêm bình luận",
+	"Mark as fixed" : "Đánh dấu sửa",
+	"Cancel" : "Hủy bỏ",
+	"Create OpenStreetBug" : "Báo cáo lỗi OpenStreetBug",
+	"Create bug" : "Báo cáo lỗi",
+	"Bug description" : "Miêu tả lỗi",
+	"Create" : "Báo cáo",
+	"Permalink" : "Liên kết thường trực",
+	"Zoom" : "Phóng lớn"
+});
+
+OpenLayers.Lang.ru = OpenLayers.Util.extend(OpenLayers.Lang.ru, {
+	"Fixed Error" : "Исправленная ошибка",
+	"Unresolved Error" : "Неисправленная ошибка",
+	"Description" : "Описание",
+	"Comment" : "Комментарий",
+	"Has been fixed." : "Эта ошибка уже исправлена. Тем не менее, может пройти пара дней, перед тем как карта обновится.",
+	"Comment/Close" : "Комментировать/Закрыть",
+	"Nickname" : "Псевдоним",
+	"Add comment" : "Добавить комментарий",
+	"Mark as fixed" : "Пометить как исправленное",
+	"Cancel" : "Отмена",
+	"Create OpenStreetBug" : "Создать ОпенСтритБаг",
+	"Create bug" : "Создать сообщение об ошибке",
+	"Bug description" : "Описание ошибки",
+	"Create" : "Создать",
+	"Permalink" : "Постоянная ссылка",
+	"Zoom" : "Масштаб"
+});
