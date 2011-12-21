@@ -583,7 +583,11 @@ OpenLayers.Layer.OpenStreetBugs.setCSS = function() {
 	
 	var st = document.createElement("style");
 	st.setAttribute("type", "text/css");
+	if(st.styleSheet){ //IE method
+		st.styleSheet.cssText = rules;
+	}else{
 	st.appendChild(document.createTextNode(rules));
+	}
 	document.getElementsByTagName("head")[0].appendChild(st);
 };
 
