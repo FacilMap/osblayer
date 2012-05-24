@@ -1056,3 +1056,22 @@ OpenLayers.Lang.ast = OpenLayers.Util.extend(OpenLayers.Lang.ast, {
 	"Permalink" : "Enllaz permanente",
 	"Zoom" : "Zoom"
 });
+
+OpenLayers.Lang.fi = OpenLayers.Util.extend(OpenLayers.Lang.fi, {
+	"Fixed Error" : "Korjattu virhe",
+	"Unresolved Error" : "Ratkaisematon virhe",
+	"Description" : "Kuvaus",
+	"Comment" : "Kommentti",
+	"Has been fixed." : "Tämä virhe on jo korjattu. Sen päivittyminen kartalle saattaa kuitenkin kestää muutaman päivän.",
+	"Comment/Close" : "Kommentti/Sulje",
+	"Nickname" : "Nimimerkki",
+	"Add comment" : "Lisää kommentti",
+	"Mark as fixed" : "Merkitse korjatuksi",
+	"Cancel" : "Peruuta",
+	"Create OpenStreetBug" : "Luo uusi OpenStreetBug",
+	"Create bug" : "Luo virhe",
+	"Bug description" : "Virheen kuvaus",
+	"Create" : "Luo",
+	"Permalink" : "Ikilinkki",
+	"Zoom" : "Zoom"
+});
