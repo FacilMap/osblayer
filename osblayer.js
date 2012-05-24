@@ -1037,3 +1037,22 @@ OpenLayers.Lang.ru = OpenLayers.Util.extend(OpenLayers.Lang.ru, {
 	"Permalink" : "Постоянная ссылка",
 	"Zoom" : "Масштаб"
 });
+
+OpenLayers.Lang.ast = OpenLayers.Util.extend(OpenLayers.Lang.ast, {
+	"Fixed Error" : "Fallu correxíu",
+	"Unresolved Error" : "Fallu ensin correxir",
+	"Description" : "Descripción",
+	"Comment" : "Comentariu",
+	"Has been fixed." : "Esti fallu yá ta correxíu. De toles maneres, pue tardar un par de díes enantes de que s'anueve la imaxe del mapa.",
+	"Comment/Close" : "Comentariu/Zarráu",
+	"Nickname" : "Alcuñu",
+	"Add comment" : "Amestar comentariu",
+	"Mark as fixed" : "Marcar como correxíu",
+	"Cancel" : "Encaboxar",
+	"Create OpenStreetBug" : "Crear OpenStreetBug",
+	"Create bug" : "Crear bug",
+	"Bug description" : "Descripcion del bug",
+	"Create" : "Crear",
+	"Permalink" : "Enllaz permanente",
+	"Zoom" : "Zoom"
+});
