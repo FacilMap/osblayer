@@ -867,6 +867,25 @@ OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
 	"Zoom" : "Zoom"
 });
 
+OpenLayers.Lang.pl = OpenLayers.Util.extend(OpenLayers.Lang.pl, {
+	"Fixed Error" : "Naprawiony błąd",
+	"Unresolved Error" : "Nierozwiązany błąd",
+	"Description" : "Opis",
+	"Comment" : "Komentarz",
+	"Has been fixed." : "Ten problem został już rozwiązany. Jednakże, może to potrwać kilka dni, zanim obraz mapy zostanie zaktualizowany.",
+	"Comment/Close" : "Skomentuj/zamknij",
+	"Nickname" : "Nick",
+	"Add comment" : "Dodaj komentarz",
+	"Mark as fixed" : "Oznacz jako rozwiązany",
+	"Cancel" : "Anuluj",
+	"Create OpenStreetBug" : "Stwórz OpenStreetBug",
+	"Create bug" : "Stwórz problem",
+	"Bug description" : "Opis problemu",
+	"Create" : "Stwórz",
+	"Permalink" : "Stały link",
+	"Zoom" : "Przybliż"
+});
+
 OpenLayers.Lang.fr = OpenLayers.Util.extend(OpenLayers.Lang.fr, {
 	"Fixed Error" : "Erreur corrigée",
 	"Unresolved Error" : "Erreur non corrigée",
